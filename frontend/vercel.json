@@ -20,5 +20,8 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ]
+  ],
+  "env": {
+    "VITE_API_BASE_URL": "https://ai-resume-screener-2-aeg3.onrender.com/api"
+  }
 }

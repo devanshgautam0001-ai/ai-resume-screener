@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../utils/api";
 import { useAuth } from "../hooks/useAuth";
+import { API_BASE_URL } from "../config/api";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -45,9 +46,9 @@ export default function RegisterPage() {
       let errorMessage = "Registration failed. Please try again.";
       
       if (err.networkError) {
-        errorMessage = "Network error: Unable to connect to server. Please ensure the backend is running on http://localhost:8080";
+        errorMessage = `Network error: Unable to connect to server (${API_BASE_URL}). Please ensure the backend is running.`;
       } else if (err.code === "ECONNREFUSED") {
-        errorMessage = "Connection refused: Backend server is not running. Please start the backend server.";
+        errorMessage = `Connection refused: Backend server is not running at ${API_BASE_URL}. Please start the backend server.`;
       } else if (err?.response?.data?.message) {
         errorMessage = err.response.data.message;
       } else if (err?.message) {
