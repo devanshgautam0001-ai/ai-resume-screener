@@ -3,8 +3,6 @@ package com.resumeai.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -14,56 +12,45 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    private static final String DEFAULT_SECRET = "ThisIsAStrongSecretKeyForResumeScreener2026ThisIsAStrongSecretKeyForResumeScreener2026";
-    private static final long DEFAULT_EXPIRATION_MS = 86400000L;
+    private static final String SECRET = "ThisIsAStrongSecretKeyForResumeScreener2026ThisIsAStrongSecretKeyForResumeScreener2026";
+    private static final long EXPIRATION_MS = 86400000L;
 
-    @Value("${app.jwt.secret:}")
-    private String secret;
+    private final SecretKey key;
 
-    @Value("${app.jwt.expiration-ms:}")
-    private String expirationMsStr;
+    public JwtUtils() {
+        this.key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
+    }
 
-    private SecretKey key;
-
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(String username) {
         Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + EXPIRATION_MS);
+
         return Jwts.builder()
-            .subject(userDetails.getUsername())
-            .issuedAt(now)
-            .expiration(new Date(now.getTime() + getExpirationMs()))
-            .signWith(getKey())
-            .compact();
+                .subject(username)
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(key)
+                .compact();
     }
 
     public String extractUsername(String token) {
         return getClaims(token).getSubject();
     }
 
-    public boolean isValid(String token, UserDetails userDetails) {
-        String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && getClaims(token).getExpiration().after(new Date());
+    public boolean validateToken(String token, String username) {
+        String extractedUsername = extractUsername(token);
+        return extractedUsername.equals(username) && !isTokenExpired(token);
     }
 
     private Claims getClaims(String token) {
-        return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token).getPayload();
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
     }
 
-    private SecretKey getKey() {
-        if (key == null) {
-            String secretKey = (secret != null && !secret.isBlank()) ? secret : DEFAULT_SECRET;
-            key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        }
-        return key;
-    }
-
-    private long getExpirationMs() {
-        if (expirationMsStr != null && !expirationMsStr.isBlank()) {
-            try {
-                return Long.parseLong(expirationMsStr);
-            } catch (NumberFormatException e) {
-                return DEFAULT_EXPIRATION_MS;
-            }
-        }
-        return DEFAULT_EXPIRATION_MS;
+    private boolean isTokenExpired(String token) {
+        return getClaims(token).getExpiration().before(new Date());
     }
 }

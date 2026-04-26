@@ -34,11 +34,9 @@ public class AuthService {
             .build();
 
         User saved = userRepository.save(user);
-        org.springframework.security.core.userdetails.User principal =
-            new org.springframework.security.core.userdetails.User(saved.getEmail(), saved.getPassword(), java.util.List.of());
 
         return new AuthDTO.AuthResponse(
-            jwtUtils.generateToken(principal),
+            jwtUtils.generateToken(saved.getEmail()),
             saved.getId(),
             saved.getName(),
             saved.getEmail(),
@@ -52,11 +50,8 @@ public class AuthService {
         User user = userRepository.findByEmail(request.email())
             .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        org.springframework.security.core.userdetails.User principal =
-            new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), java.util.List.of());
-
         return new AuthDTO.AuthResponse(
-            jwtUtils.generateToken(principal),
+            jwtUtils.generateToken(user.getEmail()),
             user.getId(),
             user.getName(),
             user.getEmail(),
