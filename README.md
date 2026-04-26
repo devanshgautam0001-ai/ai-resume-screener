@@ -1,3 +1,15 @@
+# AI Resume Screener
+
+🚀 Live Demo:
+https://ai-resume-screener-blond.vercel.app
+
+## Tech Stack
+React + Vite  
+Spring Boot  
+PostgreSQL  
+AI Resume Matching 
+
+
 # AI Resume Screening System
 
 Production-style Java + DBMS major project built on Spring Boot, PostgreSQL, React, Tailwind CSS, Apache Tika, JWT authentication, PDF export, and candidate ranking.
