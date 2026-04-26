@@ -120,3 +120,45 @@ backend/backend-error.log
 # Backup files
 *.bak
 *.backup
+
+# Devin AI configuration
+.devin/config.local.json
+
+# Render specific
+.render.yaml.backup
+
+# Vercel specific
+.vercel/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# Project specific uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
