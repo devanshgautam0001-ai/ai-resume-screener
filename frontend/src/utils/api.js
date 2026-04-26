@@ -17,6 +17,8 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.error("API Error:", error);
+    
     // If we get a 403 or 401, clear the invalid token
     if (error.response && (error.response.status === 403 || error.response.status === 401)) {
       const stored = JSON.parse(localStorage.getItem("resume-ai-auth") || "{}");
@@ -25,6 +27,13 @@ api.interceptors.response.use(
         localStorage.removeItem("resume-ai-auth");
       }
     }
+    
+    // Handle network errors
+    if (!error.response) {
+      console.error("Network error - backend may be down or CORS issue:", error.message);
+      error.networkError = true;
+    }
+    
     return Promise.reject(error);
   }
 );
