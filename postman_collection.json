@@ -1,0 +1,74 @@
+{
+  "info": {
+    "name": "AI Resume Screening System",
+    "_postman_id": "6aeea1c5-4e99-4bf6-bf06-aa41f1c26f91",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "{{baseUrl}}/auth/register", "host": ["{{baseUrl}}"], "path": ["auth", "register"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@resumeai.dev\",\n  \"password\": \"password123\",\n  \"role\": \"ROLE_ADMIN\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Create Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/jobs/create", "host": ["{{baseUrl}}"], "path": ["jobs", "create"] },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Senior Full Stack AI Engineer\",\n  \"company\": \"ResumeAI Labs\",\n  \"location\": \"Bengaluru\",\n  \"employmentType\": \"Full-time\",\n  \"minExperienceYears\": 2,\n  \"description\": \"Need Java, Spring Boot, React, PostgreSQL, Docker, JWT, and NLP experience for an AI hiring product.\",\n  \"requiredSkills\": [\"java\", \"spring boot\", \"react\", \"postgresql\", \"docker\", \"jwt\", \"nlp\"]\n}"
+        }
+      }
+    },
+    {
+      "name": "Analyze Resume",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "url": { "raw": "{{baseUrl}}/analysis/run/1/1", "host": ["{{baseUrl}}"], "path": ["analysis", "run", "1", "1"] }
+      }
+    },
+    {
+      "name": "Get Results By Job",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/results/1", "host": ["{{baseUrl}}"], "path": ["results", "1"] }
+      }
+    },
+    {
+      "name": "Get Rankings",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/rankings?jobId=1", "host": ["{{baseUrl}}"], "path": ["rankings"], "query": [{ "key": "jobId", "value": "1" }] }
+      }
+    },
+    {
+      "name": "Export PDF",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/export/pdf/1", "host": ["{{baseUrl}}"], "path": ["export", "pdf", "1"] }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080/api" },
+    { "key": "token", "value": "" }
+  ]
+}

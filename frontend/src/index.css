@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Space Grotesk", sans-serif;
+  @apply bg-midnight text-white bg-mesh min-h-screen;
+}
+
+#root {
+  @apply min-h-screen;
+}
+
+.glass-card {
+  @apply border border-white/10 bg-white/5 backdrop-blur-xl shadow-glow;
+}
+
+.page-shell {
+  @apply relative overflow-hidden;
+}
+
+.page-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 20%, rgba(110, 231, 255, 0.08), transparent 25%);
+  pointer-events: none;
+}

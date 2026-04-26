@@ -1,0 +1,7 @@
+Devansh Gautam
+Email: devansh@example.com
+Phone: +91 9876543210
+Projects: Built AI-based systems, with the ability to work with structured datasets, perform analytics at scale, design intelligent ranking workflows, create recruiter dashboards, optimize ATS scoring, and support enterprise-grade screening pipelines across multiple hiring teams with measurable business impact and rapid delivery cycles.
+Experience: Developed full stack recruiting systems with Spring Boot and React.
+Education: B.Tech Computer Science
+Skills: Java, Spring Boot, React, PostgreSQL, Docker, NLP

@@ -1,0 +1,1 @@
+Aarav Sharma`nEmail: aarav@example.com`nPhone: +91 9876543210`nSkills: Java, Spring Boot, React, PostgreSQL, Docker, JWT, NLP`nExperience: Built recruiter analytics products and resume screening pipelines.`nEducation: B.Tech Computer Science`nProjects: AI Resume Screener, Hiring Dashboard

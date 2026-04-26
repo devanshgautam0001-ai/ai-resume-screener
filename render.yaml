@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: ai-resume-screener-backend
+    env: java
+    buildCommand: cd backend && mvn clean package -DskipTests
+    startCommand: cd backend && java -jar target/backend-1.0.0.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: ai-resume-screener-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: ai-resume-screener-db
+          property: user
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: ai-resume-screener-db
+          property: password
+      - key: APP_FRONTEND_URL
+        value: https://your-frontend-domain.vercel.app
+      - key: APP_JWT_SECRET
+        generateValue: true
+      - key: APP_JWT_EXPIRATION_MS
+        value: 86400000
+      - key: APP_STORAGE_UPLOAD_DIR
+        value: /tmp/uploads
+      - key: JAVA_OPTS
+        value: "-Xmx512m -Xms256m"
+      - key: PORT
+        value: 8080
+
+databases:
+  - name: ai-resume-screener-db
+    databaseName: resume_ai
+    user: resume_ai_user
