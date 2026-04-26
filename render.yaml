@@ -1,9 +1,9 @@
 services:
   - type: web
     name: ai-resume-screener-backend
-    env: java
-    buildCommand: cd backend && mvn clean package -DskipTests
-    startCommand: cd backend && java -jar target/backend-1.0.0.jar
+    env: docker
+    dockerfilePath: ./Dockerfile.backend
+    dockerContext: .
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
