@@ -11,6 +11,7 @@ import { useAuth } from "./hooks/useAuth";
 
 function ProtectedRoute({ children }) {
   const { token } = useAuth();
+  console.log("[PROTECTED ROUTE] Token check:", token ? 'exists' : 'missing');
   return token ? children : <Navigate to="/login" replace />;
 }
 
