@@ -21,13 +21,14 @@ RUN apk add --no-cache dumb-init
 
 # Create non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
 
 # Copy jar from build stage
 COPY --from=build --chown=spring:spring /app/target/backend-1.0.0.jar app.jar
 
-# Create upload directory
-RUN mkdir -p /app/uploads && chown -R spring:spring /app/uploads
+# Create upload directory with proper permissions for Render
+USER root
+RUN mkdir -p /tmp/uploads && chmod -R 777 /tmp/uploads
+USER spring:spring
 
 # Expose port
 EXPOSE 8080
