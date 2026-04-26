@@ -26,6 +26,10 @@ services:
         value: 86400000
       - key: APP_STORAGE_UPLOAD_DIR
         value: /tmp/uploads
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+        value: org.postgresql.Driver
       - key: JAVA_OPTS
         value: "-Xmx512m -Xms256m"
       - key: PORT

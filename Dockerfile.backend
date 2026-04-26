@@ -12,6 +12,6 @@ USER root
 RUN mkdir -p /tmp/uploads && chmod -R 777 /tmp/uploads
 
 ENV APP_STORAGE_UPLOAD_DIR=/tmp/uploads
-EXPOSE 10000
+EXPOSE 8080
 
 CMD ["java","-jar","app.jar"]
