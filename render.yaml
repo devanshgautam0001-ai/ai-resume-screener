@@ -2,9 +2,7 @@ services:
   - type: web
     name: ai-resume-screener-backend
     env: docker
-    dockerfilePath: Dockerfile.backend
-    dockerContext: .
-    rootDir: .
+    dockerfilePath: ./Dockerfile.backend
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
