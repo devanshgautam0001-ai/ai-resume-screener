@@ -36,7 +36,8 @@ public class CorsConfig {
             allowedOrigins.addAll(Arrays.asList(additionalOrigins.split(",")));
         }
         
-        config.setAllowedOriginPatterns(allowedOrigins);
+        // Allow all origins for production deployment
+        config.setAllowedOriginPatterns(List.of("*"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setExposedHeaders(List.of("Authorization", "Content-Type"));
