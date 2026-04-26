@@ -131,7 +131,7 @@ Environment variables:
 - `SPRING_DATASOURCE_USERNAME=postgres`
 - `SPRING_DATASOURCE_PASSWORD=postgres`
 - `APP_FRONTEND_URL=http://localhost:5173`
-- `APP_STORAGE_UPLOAD_DIR=uploads`
+- `APP_STORAGE_UPLOAD_DIR=/tmp/uploads`
 
 ### 3. Frontend
 
