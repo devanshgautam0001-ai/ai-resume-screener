@@ -23,11 +23,11 @@ public class JobController {
 
     @GetMapping
     public ApiResponse<List<JobDTO.JobResponse>> all() {
-        return new ApiResponse<>(true, "Jobs fetched successfully", jobService.getAll());
+        return new ApiResponse<>(true, "Current user jobs fetched successfully", jobService.getAll());
     }
 
-    @GetMapping("/mine")
-    public ApiResponse<List<JobDTO.JobResponse>> mine() {
-        return new ApiResponse<>(true, "Current user jobs fetched successfully", jobService.getCurrentUserJobs());
+    @GetMapping("/{id}")
+    public ApiResponse<JobDTO.JobResponse> getById(@PathVariable Long id) {
+        return new ApiResponse<>(true, "Job fetched successfully", jobService.toDto(jobService.getByIdAndValidateOwnership(id)));
     }
 }

@@ -31,8 +31,15 @@ public class AiAnalysisService {
 
     @Transactional
     public AnalysisDTO.AnalysisResponse analyze(Long resumeId, Long jobId) {
+        User currentUser = currentUserService.getCurrentUser();
+        
         Resume resume = resumeService.getById(resumeId);
-        Job job = jobService.getById(jobId);
+        Job job = jobService.getByIdAndValidateOwnership(jobId);
+
+        // Verify the user owns the resume as well
+        if (!Objects.equals(resume.getUploadedBy().getId(), currentUser.getId())) {
+            throw new BadRequestException("You don't have access to this resume");
+        }
 
         if (!Objects.equals(resume.getJob().getId(), job.getId())) {
             throw new BadRequestException("Resume must be uploaded against the same job before analysis");
@@ -46,7 +53,7 @@ public class AiAnalysisService {
             .orElseGet(() -> analysisResultRepository.save(result));
 
         resume.setStatus(Resume.ResumeStatus.ANALYZED);
-        auditLogService.log(currentUserService.getCurrentUser(), "ANALYSIS_RESULT", saved.getId(), "ANALYSIS_COMPLETED",
+        auditLogService.log(currentUser, "ANALYSIS_RESULT", saved.getId(), "ANALYSIS_COMPLETED",
             "Generated analysis for resume " + resumeId + " and job " + jobId);
 
         rankingProcedureService.refreshRankings(jobId);
@@ -55,18 +62,30 @@ public class AiAnalysisService {
 
     @Transactional(readOnly = true)
     public List<AnalysisDTO.ResultRow> getResultsForJob(Long jobId) {
-        return analysisResultRepository.findByJobIdOrderByOverallScoreDesc(jobId).stream()
+        User currentUser = currentUserService.getCurrentUser();
+        // Verify the user owns the job
+        Job job = jobService.getByIdAndValidateOwnership(jobId);
+        return analysisResultRepository.findByJobIdAndUserIdOrderByOverallScoreDesc(jobId, currentUser.getId()).stream()
             .map(this::toResultRow)
             .toList();
     }
 
     @Transactional(readOnly = true)
     public List<AnalysisDTO.RankingResponse> getRankings(Long jobId) {
+        User currentUser = currentUserService.getCurrentUser();
+        
+        if (jobId != null) {
+            // Verify the user owns the job
+            Job job = jobService.getByIdAndValidateOwnership(jobId);
+        }
+        
         List<CandidateRanking> rankings = jobId == null
             ? candidateRankingRepository.findAllByOrderByCreatedAtDesc()
             : candidateRankingRepository.findByJobIdOrderByRankPositionAsc(jobId);
 
+        // Filter rankings to only include jobs owned by the current user
         return rankings.stream()
+            .filter(ranking -> ranking.getJob().getCreatedBy().getId().equals(currentUser.getId()))
             .map(ranking -> new AnalysisDTO.RankingResponse(
                 ranking.getId(),
                 ranking.getJob().getId(),

@@ -50,13 +50,23 @@ public class JobService {
     }
 
     public Job getById(Long id) {
+        User currentUser = currentUserService.getCurrentUser();
         return jobRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Job not found"));
     }
 
+    public Job getByIdAndValidateOwnership(Long id) {
+        User currentUser = currentUserService.getCurrentUser();
+        return jobRepository.findByIdAndCreatedById(id, currentUser.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Job not found or you don't have access"));
+    }
+
     @Transactional(readOnly = true)
     public List<JobDTO.JobResponse> getAll() {
-        return jobRepository.findAll().stream().map(this::toDto).toList();
+        User currentUser = currentUserService.getCurrentUser();
+        return jobRepository.findAllByCreatedByIdOrderByCreatedAtDesc(currentUser.getId()).stream()
+            .map(this::toDto)
+            .toList();
     }
 
     @Transactional(readOnly = true)
@@ -106,7 +116,7 @@ public class JobService {
         return value == null || value.isBlank() ? null : value.trim();
     }
 
-    private JobDTO.JobResponse toDto(Job job) {
+    public JobDTO.JobResponse toDto(Job job) {
         List<String> skills = job.getRequiredSkills().stream()
             .map(mapping -> mapping.getSkill().getName())
             .toList();

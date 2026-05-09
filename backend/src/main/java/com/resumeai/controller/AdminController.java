@@ -38,6 +38,7 @@ public class AdminController {
     private final DatabaseCleanupService databaseCleanupService;
 
     @GetMapping("/overview")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Transactional(readOnly = true)
     public ApiResponse<Map<String, Object>> overview() {
         Map<String, Object> payload = new HashMap<>();

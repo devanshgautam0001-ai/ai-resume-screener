@@ -42,7 +42,7 @@ public class ResumeService {
             throw new BadRequestException("At least one resume file is required");
         }
 
-        Job job = jobService.getById(jobId);
+        Job job = jobService.getByIdAndValidateOwnership(jobId);
         User currentUser = currentUserService.getCurrentUser();
         List<ResumeDTO.ResumeResponse> responses = new ArrayList<>();
 
@@ -54,12 +54,16 @@ public class ResumeService {
     }
 
     public Resume getById(Long id) {
+        User currentUser = currentUserService.getCurrentUser();
         return resumeRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Resume not found"));
     }
 
     public ResumeDTO.ResumeResponse findById(Long id) {
-        return toDto(getById(id));
+        User currentUser = currentUserService.getCurrentUser();
+        Resume resume = resumeRepository.findByIdAndUploadedById(id, currentUser.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("Resume not found or you don't have access"));
+        return toDto(resume);
     }
 
     public ParsedResumeData getParsedData(Long resumeId) {
@@ -69,14 +73,20 @@ public class ResumeService {
 
     @Transactional(readOnly = true)
     public List<ResumeDTO.ResumeResponse> findByJobId(Long jobId) {
-        return resumeRepository.findByJobIdOrderByCreatedAtDesc(jobId).stream()
+        User currentUser = currentUserService.getCurrentUser();
+        // First verify the user owns the job
+        Job job = jobService.getByIdAndValidateOwnership(jobId);
+        return resumeRepository.findByJobIdAndUploadedByIdOrderByCreatedAtDesc(jobId, currentUser.getId()).stream()
             .map(this::toDto)
             .toList();
     }
 
     @Transactional(readOnly = true)
     public List<ResumeDTO.ResumeResponse> findAll() {
-        return resumeRepository.findAll().stream().map(this::toDto).toList();
+        User currentUser = currentUserService.getCurrentUser();
+        return resumeRepository.findByUploadedByIdOrderByCreatedAtDesc(currentUser.getId()).stream()
+            .map(this::toDto)
+            .toList();
     }
 
     @Transactional
