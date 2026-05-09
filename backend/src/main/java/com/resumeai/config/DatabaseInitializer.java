@@ -30,26 +30,26 @@ public class DatabaseInitializer {
             // Seed skills if table is empty
             if (skillRepository.count() == 0) {
                 List<Skill> skills = Arrays.asList(
-                    new Skill(null, "Java", "PROGRAMMING"),
-                    new Skill(null, "Spring Boot", "FRAMEWORK"),
-                    new Skill(null, "React", "FRAMEWORK"),
-                    new Skill(null, "JavaScript", "PROGRAMMING"),
-                    new Skill(null, "Python", "PROGRAMMING"),
-                    new Skill(null, "PostgreSQL", "DATABASE"),
-                    new Skill(null, "Docker", "DEVOPS"),
-                    new Skill(null, "Kubernetes", "DEVOPS"),
-                    new Skill(null, "AWS", "CLOUD"),
-                    new Skill(null, "Git", "TOOLS"),
-                    new Skill(null, "Maven", "TOOLS"),
-                    new Skill(null, "REST API", "ARCHITECTURE"),
-                    new Skill(null, "Microservices", "ARCHITECTURE"),
-                    new Skill(null, "TypeScript", "PROGRAMMING"),
-                    new Skill(null, "Node.js", "PROGRAMMING"),
-                    new Skill(null, "MongoDB", "DATABASE"),
-                    new Skill(null, "Redis", "DATABASE"),
-                    new Skill(null, "Linux", "OS"),
-                    new Skill(null, "Agile", "METHODOLOGY"),
-                    new Skill(null, "CI/CD", "DEVOPS")
+                    Skill.builder().name("Java").category("PROGRAMMING").build(),
+                    Skill.builder().name("Spring Boot").category("FRAMEWORK").build(),
+                    Skill.builder().name("React").category("FRAMEWORK").build(),
+                    Skill.builder().name("JavaScript").category("PROGRAMMING").build(),
+                    Skill.builder().name("Python").category("PROGRAMMING").build(),
+                    Skill.builder().name("PostgreSQL").category("DATABASE").build(),
+                    Skill.builder().name("Docker").category("DEVOPS").build(),
+                    Skill.builder().name("Kubernetes").category("DEVOPS").build(),
+                    Skill.builder().name("AWS").category("CLOUD").build(),
+                    Skill.builder().name("Git").category("TOOLS").build(),
+                    Skill.builder().name("Maven").category("TOOLS").build(),
+                    Skill.builder().name("REST API").category("ARCHITECTURE").build(),
+                    Skill.builder().name("Microservices").category("ARCHITECTURE").build(),
+                    Skill.builder().name("TypeScript").category("PROGRAMMING").build(),
+                    Skill.builder().name("Node.js").category("PROGRAMMING").build(),
+                    Skill.builder().name("MongoDB").category("DATABASE").build(),
+                    Skill.builder().name("Redis").category("DATABASE").build(),
+                    Skill.builder().name("Linux").category("OS").build(),
+                    Skill.builder().name("Agile").category("METHODOLOGY").build(),
+                    Skill.builder().name("CI/CD").category("DEVOPS").build()
                 );
                 
                 skillRepository.saveAll(skills);
